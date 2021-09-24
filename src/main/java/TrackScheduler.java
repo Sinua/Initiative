@@ -17,6 +17,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TrackScheduler extends AudioEventAdapter {
     private final BlockingQueue<AudioTrack> queue;
     private final AudioPlayer player;
+    private AudioTrack mostRecentTrack = null;
     /**
      * @param player The audio player this scheduler uses
      */
@@ -35,8 +36,10 @@ public class TrackScheduler extends AudioEventAdapter {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
+        mostRecentTrack = track;
         if (!player.startTrack(track, true)) {
             queue.offer(track);
+            System.out.println(getMostRecentTrack().getInfo().title + " XD");
         }
     }
 
@@ -62,6 +65,14 @@ public class TrackScheduler extends AudioEventAdapter {
         for (AudioTrack audioTrack:queue)
             audioTracks.add(audioTrack);
         return audioTracks;
+    }
+
+    public AudioTrack getMostRecentTrack() {
+        return mostRecentTrack;
+    }
+
+    public void clearMostRecentTrack() {
+        mostRecentTrack = null;
     }
 
     public String getQueueMessage() {

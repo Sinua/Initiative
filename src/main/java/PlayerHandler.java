@@ -7,6 +7,7 @@ import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import com.google.api.services.youtube.YouTube;
 
+import javax.sound.midi.Track;
 import java.time.Instant;
 import java.util.List;
 
@@ -60,7 +61,9 @@ public class PlayerHandler {
 
     private String formatPosition(long pos) {
         String hr = (pos/3600>0) ? pos/3600 + "h:" : "";
+        pos %= 3600;
         String min = (pos/60>0) ? pos/60 + "m:" : "";
+        pos %= 60;
         String sec = pos%60 + "s";
 
         return hr + min + sec;
@@ -78,8 +81,24 @@ public class PlayerHandler {
         if (player.getPlayingTrack() == null){
             return Constants.CODE_BLOCK_THING + "NO TRACK IS PLAYING !!!!" + Constants.CODE_BLOCK_THING;
         }
-        return Constants.CODE_BLOCK_THING + formatPosition(getTrackPos()) + " / " + formatPosition(player.getPlayingTrack().getInfo().length/1000)
+        return Constants.CODE_BLOCK_THING + formatPosition(getTrackPos()) + " / " + formatPosition(player.getPlayingTrack().getDuration()/1000)
                 + " - " + player.getPlayingTrack().getInfo().title + Constants.CODE_BLOCK_THING;
+    }
+
+    public String getNewTrackMessage() {
+        long startTime = Instant.now().getEpochSecond();
+        while(trackScheduler.getMostRecentTrack() == null && Instant.now().getEpochSecond() - startTime <= 5){
+            try {
+                Thread.sleep(500);
+            }catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        String message = Constants.CODE_BLOCK_THING + "Added song: " +
+                trackScheduler.getMostRecentTrack().getInfo().title + " - Duration: " +
+                formatPosition(trackScheduler.getMostRecentTrack().getDuration()/1000) + Constants.CODE_BLOCK_THING;
+        trackScheduler.clearMostRecentTrack();
+        return message;
     }
 
     private String makeQueryYTLink(List<String> query){

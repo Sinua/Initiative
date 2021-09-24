@@ -33,7 +33,7 @@ public class Commands {
                 .flatMap(voiceConnection -> Mono.justOrEmpty(event.getMessage().getContent()))
                 .map(content -> new ArrayList(Arrays.asList(content.split(" "))))
                 .doOnNext(command -> Initiative.playerManager.loadItem(PlayerHandler.getPlayerHandler(event.getGuildId().get()).parseSearchQuery(command), PlayerHandler.getPlayerHandler(event.getGuildId().get()).loadHandler))
-                .flatMap(message -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage(PlayerHandler.getPlayerHandler(event.getGuildId().get()).getNpMessage())))
+                .flatMap(command -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage(PlayerHandler.getPlayerHandler(event.getGuildId().get()).getNewTrackMessage())))
                 .then());
 
         commands.put("pause", event -> Mono.justOrEmpty(event.getMessage().getContent())
