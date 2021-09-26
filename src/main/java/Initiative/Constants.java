@@ -1,3 +1,5 @@
+package Initiative;
+
 public class Constants {
     static final String CODE_BLOCK_THING = "```";
     static final String NEWLINE = "\n";
