@@ -101,6 +101,14 @@ public class PlayerHandler {
         return message;
     }
 
+    public String getSkipMessage() {
+        if (player.getPlayingTrack() == null){
+            return Constants.CODE_BLOCK_THING + "NO TRACK IS PLAYING !!!!" + Constants.CODE_BLOCK_THING;
+        }
+        return Constants.CODE_BLOCK_THING + "Skipped at " + formatPosition(getTrackPos()) + " / " + formatPosition(player.getPlayingTrack().getDuration()/1000)
+                + " - " + player.getPlayingTrack().getInfo().title + Constants.CODE_BLOCK_THING;
+    }
+
     private String makeQueryYTLink(List<String> query){
         query.remove(0);
         String searchQ = String.join(" ", query);

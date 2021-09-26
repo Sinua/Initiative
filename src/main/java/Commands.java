@@ -71,7 +71,8 @@ public class Commands {
                 .then());
 
         commands.put("skip", event -> Mono.justOrEmpty(event.getGuildId().get())
-                .doOnNext(guildId -> PlayerHandler.getPlayerHandler(guildId).trackScheduler.nextTrack())
+                .flatMap(guildID -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage(PlayerHandler.getPlayerHandler(guildID).getSkipMessage())))
+                .doOnNext(guildId -> PlayerHandler.getPlayerHandler(event.getGuildId().get()).trackScheduler.nextTrack())
                 .then());
     }
 }
