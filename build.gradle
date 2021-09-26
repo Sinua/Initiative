@@ -14,7 +14,7 @@ application {
     mainClass = 'Initiative.Initiative'
 }
 
-applicationDefaultJvmArgs = ["-Dserver.port=5353"]
+applicationDefaultJvmArgs = ["-Djava.rmi.server.port=5353"]
 
 dependencies {
     implementation 'com.google.api-client:google-api-client:1.23.0'
