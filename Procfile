@@ -1,1 +1,1 @@
-worker: java -jar build/libs/Initiative-all.jar
+web: java -Dserver.port=$PORT -jar build/libs/Initiative-all.jar
