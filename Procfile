@@ -1,1 +1,1 @@
-web: java -jar build/libs/Initiative-all.jar
+worker: java -jar build/libs/Initiative-all.jar
