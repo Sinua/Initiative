@@ -1,1 +1,1 @@
-web: java -jar target/myapp-1.0.0.jar TEST
+web: gradle run --args="NzU3Njk3MzU0NDc5Njk4MDAx.X2kKpg.LGmKlKOzkVVeVBCsei1Km4_H9ss AIzaSyABxcDjLkGkV_57IBIdgci8oHswQxb4rTo"

@@ -1,21 +1,21 @@
 plugins {
+    id 'java'
     id 'application'
 }
-apply plugin: 'application'
-mainClassName = "com."
 
-group 'org.example'
-version '1.0-SNAPSHOT'
-
-applicationDefaultJvmArgs = [
-        "-Djava.util.logging.config.file=src/main/resources/logging.properties"
-]
 repositories {
     mavenCentral()
     maven {
         url 'https://m2.dv8tion.net/releases'
     }
 }
+
+
+
+application {
+    mainClass = 'Initiative.Initiative'
+}
+
 
 dependencies {
     implementation 'com.google.api-client:google-api-client:1.23.0'
