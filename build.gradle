@@ -10,8 +10,6 @@ repositories {
     }
 }
 
-
-
 application {
     mainClass = 'Initiative.Initiative'
 }
