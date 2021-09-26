@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 repositories {
@@ -15,6 +16,8 @@ application {
 }
 
 applicationDefaultJvmArgs = ["-Djava.rmi.server.port=5353"]
+
+build.mustRunAfter shadowJar
 
 dependencies {
     implementation 'com.google.api-client:google-api-client:1.23.0'

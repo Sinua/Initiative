@@ -19,9 +19,8 @@ public class Initiative {
     public static Map<Snowflake, PlayerHandler> snowflakePlayer = new HashMap<>();
 
     public static void main(final String[] args) {
-        Constants.apiKey = args[1];
 
-        final GatewayDiscordClient client = DiscordClientBuilder.create(args[0]).build().login().block();
+        final GatewayDiscordClient client = DiscordClientBuilder.create(System.getenv("DISCORD_KEY")).build().login().block();
         AudioSourceManagers.registerRemoteSources(Initiative.playerManager);
         Initiative.playerManager.getConfiguration().setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
 

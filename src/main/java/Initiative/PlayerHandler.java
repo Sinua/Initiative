@@ -114,7 +114,7 @@ public class PlayerHandler {
         String searchQ = String.join(" ", query);
         try {
             YouTube.Search.List request = youtubeService.search().list("id,snippet");
-            request.setKey(Constants.apiKey);
+            request.setKey(System.getenv("GOOGLE_API_KEY"));
             request.setQ(searchQ);
             request.setType("video");
             request.setFields("items(id/videoId)");
