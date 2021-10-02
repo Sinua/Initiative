@@ -132,7 +132,7 @@ public class PlayerHandler {
 
     public String parseSearchQuery(List<String> query){
         if(query.size() == 1)
-            return "XD";
+            return "https://www.youtube.com/watch?v=2ZIpFytCSVc";
         if(query.get(1).contains("youtube.com")) {
             return query.get(1);
         }
