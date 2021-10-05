@@ -60,6 +60,10 @@ public class Commands {
                 .flatMap(message -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage(message)))
                 .then());
 
+        commands.put("loop", event -> Mono.justOrEmpty(PlayerHandler.getPlayerHandler(event.getGuildId().get()))
+                .doOnNext(playerHandler -> playerHandler.trackScheduler.toggleLoop())
+                .then());
+
         commands.put("remove", event -> Mono.just(event.getMessage().getContent())
                 .map(content -> Arrays.asList(content.split(" ")))
                 .doOnNext(content -> PlayerHandler.getPlayerHandler(event.getGuildId().get()).trackScheduler.removeTrack(Integer.parseInt(content.get(1))))

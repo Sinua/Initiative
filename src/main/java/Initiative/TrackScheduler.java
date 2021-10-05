@@ -18,6 +18,8 @@ public class TrackScheduler extends AudioEventAdapter {
     private final BlockingQueue<AudioTrack> queue;
     private final AudioPlayer player;
     private AudioTrack mostRecentTrack = null;
+    private boolean shouldLoop = false;
+
     /**
      * @param player The audio player this scheduler uses
      */
@@ -49,7 +51,11 @@ public class TrackScheduler extends AudioEventAdapter {
     public void nextTrack() {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
-        player.startTrack(queue.poll(), false);
+        AudioTrack nextTrack = queue.poll();
+        if (shouldLoop){
+            queue.offer(nextTrack.makeClone());
+        }
+        player.startTrack(nextTrack, false);
     }
 
     @Override
@@ -98,5 +104,11 @@ public class TrackScheduler extends AudioEventAdapter {
     public void clearQueue() {
         while(!queue.isEmpty())
             queue.remove();
+    }
+
+    public void toggleLoop() {
+        if (!player.isPaused() && shouldLoop == false)
+            queue.offer(player.getPlayingTrack().makeClone());
+        shouldLoop = shouldLoop ^ true;
     }
 }
