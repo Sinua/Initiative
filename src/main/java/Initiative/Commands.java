@@ -32,6 +32,7 @@ public class Commands {
                 // join returns a VoiceConnection which would be required if we were
                 // adding disconnection features, but for now we are just ignoring it.
                 .flatMap(channel -> channel.join(spec -> spec.setProvider(PlayerHandler.getPlayerHandler(event.getGuildId().get()).provider)))
+                .doOnNext(voiceConnection -> Initiative.snowflakePlayer.get(event.getGuildId().get()).setVoiceConnection(voiceConnection))
                 .flatMap(voiceConnection -> Mono.justOrEmpty(event.getMessage().getContent()))
                 .map(content -> new ArrayList(Arrays.asList(content.split(" "))))
                 .doOnNext(command -> Initiative.playerManager.loadItem(PlayerHandler.getPlayerHandler(event.getGuildId().get()).parseSearchQuery(command), PlayerHandler.getPlayerHandler(event.getGuildId().get()).loadHandler))
