@@ -52,6 +52,9 @@ public class PlayerHandler {
 
     public void seekTrack(String pos) {
         long positionInMilli = Long.parseLong(pos) * 1000;
+        if(player.getPlayingTrack() == null) {
+            return;
+        }
         player.getPlayingTrack().setPosition(positionInMilli);
     }
 
