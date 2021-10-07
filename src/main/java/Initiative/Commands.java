@@ -14,7 +14,7 @@ public class Commands {
 
     static {
         commands.put("ping",
-                event -> event.getMessage().getChannel().flatMap(channel -> channel.createMessage("Pong!"))
+                event -> event.getMessage().getChannel().doOnNext(messageChannel -> messageChannel.createMessage("Pong!"))
                         .then());
 
         commands.put("join", event -> Mono.justOrEmpty(event.getMember())
@@ -39,12 +39,14 @@ public class Commands {
                 .flatMap(command -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage(PlayerHandler.getPlayerHandler(event.getGuildId().get()).getNewTrackMessage())))
                 .then());
 
-        commands.put("pause", event -> Mono.justOrEmpty(event.getMessage().getContent())
+        commands.put("pause", event -> event.getMessage().getChannel()
                 .doOnNext(command -> PlayerHandler.getPlayerHandler(event.getGuildId().get()).player.setPaused(true))
+                .flatMap(messageChannel-> messageChannel.createMessage(Constants.CODE_BLOCK_THING+"Paused"+Constants.CODE_BLOCK_THING))
                 .then());
 
-        commands.put("resume", event -> Mono.justOrEmpty(event.getMessage().getContent())
-                .doOnNext(command -> PlayerHandler.getPlayerHandler(event.getGuildId().get()).player.setPaused(true))
+        commands.put("resume", event -> event.getMessage().getChannel()
+                .doOnNext(command -> PlayerHandler.getPlayerHandler(event.getGuildId().get()).player.setPaused(false))
+                .flatMap(messageChannel-> messageChannel.createMessage(Constants.CODE_BLOCK_THING+"Resumed"+Constants.CODE_BLOCK_THING))
                 .then());
 
         commands.put("seek", event -> Mono.justOrEmpty(event.getMessage().getContent())
@@ -62,15 +64,18 @@ public class Commands {
 
         commands.put("loop", event -> Mono.justOrEmpty(PlayerHandler.getPlayerHandler(event.getGuildId().get()))
                 .doOnNext(playerHandler -> playerHandler.trackScheduler.toggleLoop())
+                .flatMap(playerHandler -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage("Looping the following: \n" + playerHandler.trackScheduler.getQueueMessage())))
                 .then());
 
         commands.put("remove", event -> Mono.just(event.getMessage().getContent())
                 .map(content -> Arrays.asList(content.split(" ")))
                 .doOnNext(content -> PlayerHandler.getPlayerHandler(event.getGuildId().get()).trackScheduler.removeTrack(Integer.parseInt(content.get(1))))
+                .flatMap(commands -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage(Constants.CODE_BLOCK_THING+"Removed song at index " + Integer.parseInt(commands.get(1))+Constants.CODE_BLOCK_THING)))
                 .then());
 
         commands.put("clear", event -> Mono.justOrEmpty(PlayerHandler.getPlayerHandler(event.getGuildId().get()).trackScheduler)
                 .doOnNext(trackScheduler-> trackScheduler.clearQueue())
+                .flatMap(trackScheduler -> event.getMessage().getChannel().flatMap(messageChannel -> messageChannel.createMessage(Constants.CODE_BLOCK_THING+"Queue Cleared"+Constants.CODE_BLOCK_THING)))
                 .then());
 
         commands.put("dc", event -> Mono.justOrEmpty(PlayerHandler.getPlayerHandler(event.getGuildId().get()).getCurrentVoiceConnection())
