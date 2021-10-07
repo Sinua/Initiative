@@ -1,6 +1,7 @@
 package Initiative;
 
 import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import discord4j.common.util.Snowflake;
@@ -123,19 +124,22 @@ public class PlayerHandler {
             request.setFields("items(id/videoId)");
             SearchListResponse response = request.execute();
             if(response != null) {
-                String vidID = Constants.YOUTUBE_VIDEO_PREIX + response.getItems().iterator().next().getId().getVideoId();
+                List<SearchResult> searchResults = response.getItems();
+                if(searchResults.size() == 0)
+                    return Constants.DEFAULT_SONG;
+                String vidID = Constants.YOUTUBE_VIDEO_PREIX + searchResults.iterator().next().getId().getVideoId();
                 System.out.println(vidID);
                 return vidID;
             }
         } catch (Exception e){
-            System.out.printf(String.valueOf(e));
+            System.out.printf(e + " MakequeryYTLink");
         }
         return searchQ;
     }
 
     public String parseSearchQuery(List<String> query){
         if(query.size() == 1)
-            return "https://www.youtube.com/watch?v=2ZIpFytCSVc";
+            return Constants.DEFAULT_SONG;
         if(query.get(1).contains("youtube.com")) {
             return query.get(1);
         }
