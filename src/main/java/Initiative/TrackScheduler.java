@@ -107,8 +107,13 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void toggleLoop() {
-        if (!player.isPaused() && shouldLoop == false)
-            queue.offer(player.getPlayingTrack().makeClone());
-        shouldLoop = shouldLoop ^ true;
+        try{
+            if (player.getPlayingTrack() != null && shouldLoop == false)
+                queue.offer(player.getPlayingTrack().makeClone());
+            shouldLoop = shouldLoop ^ true;
+        } catch(Exception e){
+            System.out.println(e);
+        }
+
     }
 }
