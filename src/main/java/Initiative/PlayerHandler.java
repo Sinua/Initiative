@@ -22,7 +22,7 @@ public class PlayerHandler {
     public final Snowflake guildId;
     private VoiceConnection currentVoiceConnection;
     private YouTube youtubeService;
-    private static org.apache.logging.log4j.Logger logger = org.apache.logging.log4j.LogManager.getLogger();
+    private static org.apache.logging.log4j.Logger logger = org.apache.logging.log4j.LogManager.getLogger(PlayerHandler.class);
 
     public PlayerHandler(Snowflake guildId) {
         this.guildId = guildId;
