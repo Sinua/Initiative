@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Level;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PlayerHandler {
 
@@ -22,7 +23,7 @@ public class PlayerHandler {
     public final Snowflake guildId;
     private VoiceConnection currentVoiceConnection;
     private YouTube youtubeService;
-    private static org.apache.logging.log4j.Logger logger = org.apache.logging.log4j.LogManager.getLogger(PlayerHandler.class);
+    private static Logger logger = Logger.getLogger(PlayerHandler.class.getName());
 
     public PlayerHandler(Snowflake guildId) {
         this.guildId = guildId;
@@ -57,10 +58,10 @@ public class PlayerHandler {
 
         long positionInMilli = Long.parseLong(pos) * 1000;
         if(player.getPlayingTrack() == null) {
-            logger.log(Level.INFO, "No song playing to seek");
+            logger.info("No song playing to seek");
             return;
         }
-        logger.log(Level.INFO, "Seeking at " + pos + " for song: " + player.getPlayingTrack().getInfo().title);
+        logger.info("Seeking at " + pos + " for song: " + player.getPlayingTrack().getInfo().title);
         player.getPlayingTrack().setPosition(positionInMilli);
     }
 
@@ -144,14 +145,14 @@ public class PlayerHandler {
 
     public String parseSearchQuery(List<String> query){
         if(query.size() == 1){
-            logger.log(Level.INFO, "Empty Query");
+            logger.info("Empty Query");
             return Constants.DEFAULT_SONG;
         }
         if(query.get(1).contains("youtube.com")) {
             return query.get(1);
         }
         String vidID = makeQueryYTLink(query);
-        logger.log(Level.INFO, "Received query: " + vidID);
+        logger.info( "Received query: " + vidID);
         return vidID;
     }
 }
