@@ -8,6 +8,7 @@ import discord4j.common.util.Snowflake;
 import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import com.google.api.services.youtube.YouTube;
+import org.apache.logging.log4j.Level;
 
 import java.time.Instant;
 import java.util.List;
@@ -21,6 +22,7 @@ public class PlayerHandler {
     public final Snowflake guildId;
     private VoiceConnection currentVoiceConnection;
     private YouTube youtubeService;
+    private static org.apache.logging.log4j.Logger logger = org.apache.logging.log4j.LogManager.getLogger();
 
     public PlayerHandler(Snowflake guildId) {
         this.guildId = guildId;
@@ -52,10 +54,13 @@ public class PlayerHandler {
     }
 
     public void seekTrack(String pos) {
+
         long positionInMilli = Long.parseLong(pos) * 1000;
         if(player.getPlayingTrack() == null) {
+            logger.log(Level.INFO, "No song playing to seek");
             return;
         }
+        logger.log(Level.INFO, "Seeking at " + pos + " for song: " + player.getPlayingTrack().getInfo().title);
         player.getPlayingTrack().setPosition(positionInMilli);
     }
 
@@ -138,12 +143,15 @@ public class PlayerHandler {
     }
 
     public String parseSearchQuery(List<String> query){
-        if(query.size() == 1)
+        if(query.size() == 1){
+            logger.log(Level.INFO, "Empty Query");
             return Constants.DEFAULT_SONG;
+        }
         if(query.get(1).contains("youtube.com")) {
             return query.get(1);
         }
         String vidID = makeQueryYTLink(query);
+        logger.log(Level.INFO, "Received query: " + vidID);
         return vidID;
     }
 }
