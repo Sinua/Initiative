@@ -36,7 +36,7 @@ public final class AudioLoadResultHandlerImpl implements AudioLoadResultHandler 
 
     @Override
     public void loadFailed(final FriendlyException exception) {
-        System.out.println(exception.getMessage());
+        System.out.println("loadFailed :" + exception.getMessage());
     }
 
 }
