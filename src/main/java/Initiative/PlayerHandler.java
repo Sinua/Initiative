@@ -8,7 +8,6 @@ import discord4j.common.util.Snowflake;
 import discord4j.voice.AudioProvider;
 import discord4j.voice.VoiceConnection;
 import com.google.api.services.youtube.YouTube;
-import org.apache.logging.log4j.Level;
 
 import java.time.Instant;
 import java.util.List;
@@ -55,7 +54,10 @@ public class PlayerHandler {
     }
 
     public void seekTrack(String pos) {
-
+        if (!pos.matches("[0-9]+")){
+            logger.info("Incorrect format: " + pos);
+            return;
+        }
         long positionInMilli = Long.parseLong(pos) * 1000;
         if(player.getPlayingTrack() == null) {
             logger.info("No song playing to seek");

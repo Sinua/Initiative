@@ -7,11 +7,14 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import discord4j.common.util.Snowflake;
 
+import java.util.logging.Logger;
+
 
 public final class AudioLoadResultHandlerImpl implements AudioLoadResultHandler {
 
     private final AudioPlayer player;
     private final Snowflake guildID;
+    private static Logger logger = Logger.getLogger(AudioLoadResultHandlerImpl.class.getName());
 
     public AudioLoadResultHandlerImpl(final AudioPlayer player, final Snowflake guildID) {
         this.player = player;
@@ -36,7 +39,7 @@ public final class AudioLoadResultHandlerImpl implements AudioLoadResultHandler 
 
     @Override
     public void loadFailed(final FriendlyException exception) {
-        System.out.println("loadFailed :" + exception.getMessage());
+        exception.printStackTrace();
     }
 
 }
