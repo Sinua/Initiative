@@ -150,7 +150,7 @@ public class PlayerHandler {
             logger.info("Empty Query");
             return Constants.DEFAULT_SONG;
         }
-        if(query.get(1).contains("youtube.com")) {
+        if(query.get(1).contains("youtube.com") ||  query.get(1).contains("youtu.be")) {
             return query.get(1);
         }
         String vidID = makeQueryYTLink(query);
